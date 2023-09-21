@@ -44,31 +44,24 @@ std::string optimalSolution(std::vector<int> digitsSet, int target){
         if((dp[i] = isConcatenation(i)) != -1)
             continue;
         for(int j = 1; j < i; j++){
-            if(dp[j] == -1)
+            if(dp[j] == -1) // no solution found for j
                 continue;
+            // if i is divisible by j and i / j has a solution
+            // and i / j is not computed with addition
             if(i % j == 0 && dp[i / j] != -1 && operator_[i / j] != 0) {
                 if(dp[i] == -1 || dp[i] > dp[i / j] + dp[j] + 1) {
                     dp[i] = dp[i / j] + dp[j] + 1;
-                    if(i / j < j) {
-                        operant1Parent[i] = i / j;
-                        operant2Parent[i] = j;
-                    } else {
-                        operant2Parent[i] = i / j;
-                        operant1Parent[i] = j;
-                    }
+                    operant1Parent[i] = i / j;
+                    operant2Parent[i] = j;
                     operator_[i] = 1;
                 }
             }
+            // if i - j has a solution
             if(dp[i - j] != -1){
                 if(dp[i] == -1 || dp[i] > dp[i - j] + dp[j] + 1) {
                     dp[i] = dp[i - j] + dp[j] + 1;
-                    if(i - j < j) {
-                        operant1Parent[i] = i - j;
-                        operant2Parent[i] = j;
-                    } else {
-                        operant2Parent[i] = i - j;
-                        operant1Parent[i] = j;
-                    }
+                    operant1Parent[i] = i - j;
+                    operant2Parent[i] = j;
                     operator_[i] = 0;
                 }
             }
